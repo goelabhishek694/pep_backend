@@ -10,6 +10,7 @@ app.use(express.json());
 app.use(express.static('public'));
 const userRouter=express.Router();
 const authRouter=express.Router();
+
 app.use('/user',userRouter);
 app.use('/auth',authRouter);
 //mounting in express
@@ -27,6 +28,19 @@ userRouter
 authRouter
 .route('/signup')
 .post(signupUser);
+
+
+//redirects
+app.get('/user-all',(req,res)=>{
+    res.redirect('/user');
+});
+
+//404 page
+app.use((req,res)=>{
+    res.sendFile('public/404.html',{root:__dirname})
+});
+
+
 
 function signupUser(req,res){
     // let userDetails=req.body;
@@ -90,6 +104,8 @@ function getUserById(req,res){
     console.log(req.params);
     res.json(req.params.id);
 }
+
+
 
 
 
