@@ -96,7 +96,8 @@ function signupUser(req,res){
     // let password=userDetails.password;
 
     let{email,name,password}=req.body;
-    user.push({email,name,password});
+    // user.push({email,name,password});
+    //put all data in mongo db
     console.log('user',req.body);
     res.json({
         message:'user signedUp',
