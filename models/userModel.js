@@ -25,6 +25,9 @@ const userSchema=new mongoose.Schema({
             return validator.validate(this.email);
         }
     },
+    createdAt:{
+        type:Date
+    },
     password:{
         type:String,
         required:true,
@@ -40,17 +43,23 @@ const userSchema=new mongoose.Schema({
     }
 });
 
+userSchema.pre('save',function(){
+    this.confirmPassword=undefined;
+});
+
 const userModel=mongoose.model('userModel',userSchema);
 
-(async function createUser(){
-    let user={
-        name:'Abhi',
-        age:20,
-        email:'abcd@gmail.com',
-        password:'12345678',
-        confirmPassword:'12345678'
-    };
-    let userObj=await userModel.create(user);
-    console.log(userObj);
-})();
+module.exports=userModel;
+
+// (async function createUser(){
+//     let user={
+//         name:'Abhi',
+//         age:20,
+//         email:'abcd@gmail.com',
+//         password:'12345678',
+//         confirmPassword:'12345678'
+//     };
+    
+//     console.log(userObj);
+// })();
 

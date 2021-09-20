@@ -29,6 +29,38 @@ userRouter
 .patch(updateUser)
 .delete(deleteUser);
 
+//post request
+// client-> server 
+//create
+// app.post('/user',createUser);
+function createUser(req,res){
+    user=req.body;
+    // console.log(req.body);
+    res.send('data has been added succesfully');
+}
+//update
+// app.patch('/user',updateUser);
+function updateUser (req,res){
+    let obj=req.body;
+    for(let key in obj){
+        user[key]=obj[key];
+    }
+    res.json(user);
+};
+//delete 
+// app.delete('/user',deleteUser);
+function deleteUser(req,res){
+    user={};
+    res.json(user);
+    // res.send('ussr has been deleted');
+}
+//param route
+// app.get('/user/:id',getUserById);
+
+function getUserById(req,res){
+    console.log(req.params);
+    res.json(req.params.id);
+}
 // app.use((req,res,next)=>{
 //     //do some work
 //     console.log('i am a middleware 2nd time');
@@ -41,7 +73,43 @@ userRouter
 
 authRouter
 .route('/signup')
-.post(signupUser);
+.post(setCreatedAt,signupUser);
+
+function setCreatedAt(req,res,next){
+    let obj=req.body;
+    //keys ka arr -> uska length
+    let length=Object.keys(obj).length;
+    if(length==0){
+        return res.status(400).json({message:"cannot create user if req.body is empty"})
+    }
+    req.body.createdAt=new Date().toISOString();
+    next();
+}
+const userModel=require('./models/userModel');
+async function signupUser(req,res){
+    // let userDetails=req.body;
+    // let name=userDetails.name;
+    // let email=userDetails.email;
+    // let password=userDetails.password;
+    try{
+        let userObj=req.body;
+        // user.push({email,name,password});
+        //put all data in mongo db
+        // create document in userModel
+        let user=await userModel.create(userObj);
+        console.log('user',user);
+        res.json({
+            message:'user signedUp',
+            user:userObj
+        });
+    }
+    catch(err){
+        console.log(err);
+        res.json({message: err.message})
+    }
+}
+
+
 
 authRouter
 .route('/forgetPassword')
@@ -76,7 +144,7 @@ function validateEmail(req,res){
 }
 
 
-https://classroom.pepcoding.com/index
+// https://classroom.pepcoding.com/index
 //redirects
 app.get('/user-all',(req,res)=>{
     res.redirect('/user');
@@ -89,21 +157,7 @@ app.use((req,res)=>{
 
 
 
-function signupUser(req,res){
-    // let userDetails=req.body;
-    // let name=userDetails.name;
-    // let email=userDetails.email;
-    // let password=userDetails.password;
 
-    let{email,name,password}=req.body;
-    // user.push({email,name,password});
-    //put all data in mongo db
-    console.log('user',req.body);
-    res.json({
-        message:'user signedUp',
-        user:req.body
-    });
-}
 
 
 let user=[];
@@ -121,38 +175,7 @@ function getUser(req,res){
     res.json(user);
 }
 
-//post request
-// client-> server 
-//create
-// app.post('/user',createUser);
-function createUser(req,res){
-    user=req.body;
-    // console.log(req.body);
-    res.send('data has been added succesfully');
-}
-//update
-// app.patch('/user',updateUser);
-function updateUser (req,res){
-    let obj=req.body;
-    for(let key in obj){
-        user[key]=obj[key];
-    }
-    res.json(user);
-};
-//delete 
-// app.delete('/user',deleteUser);
-function deleteUser(req,res){
-    user={};
-    res.json(user);
-    // res.send('ussr has been deleted');
-}
-//param route
-// app.get('/user/:id',getUserById);
 
-function getUserById(req,res){
-    console.log(req.params);
-    res.json(req.params.id);
-}
 
 
 
