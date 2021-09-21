@@ -25,6 +25,7 @@ const userSchema=new mongoose.Schema({
             return validator.validate(this.email);
         }
     },
+    // createdAt:Date,
     createdAt:{
         type:Date
     },

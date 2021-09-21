@@ -29,6 +29,11 @@ userRouter
 .patch(updateUser)
 .delete(deleteUser);
 
+async function getUser(req,res){
+    console.log('getUser called');
+    res.json(user);  
+}
+
 //post request
 // client-> server 
 //create
@@ -143,8 +148,6 @@ function validateEmail(req,res){
         });
 }
 
-
-// https://classroom.pepcoding.com/index
 //redirects
 app.get('/user-all',(req,res)=>{
     res.redirect('/user');
@@ -155,12 +158,7 @@ app.use((req,res)=>{
     res.sendFile('public/404.html',{root:__dirname})
 });
 
-
-
-
-
-
-let user=[];
+// let user=[];
 // client <- server
 //crud- create read update delete
 //read
@@ -170,10 +168,7 @@ let user=[];
 
 // app.get('/user',getUser);
 
-function getUser(req,res){
-    console.log('getUser called');
-    res.json(user);
-}
+
 
 
 
