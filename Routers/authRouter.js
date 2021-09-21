@@ -13,6 +13,10 @@ authRouter
 .get(getForgetPassword)
 .post(postForgetPassword,validateEmail);
 
+authRouter
+.route('/login')
+.post(loginUser);
+
 //---------functions----------------
 
 function setCreatedAt(req,res,next){
@@ -74,6 +78,42 @@ function validateEmail(req,res){
             message:"data received",
             data:req.body
         });
+}
+
+async function loginUser(req,res){
+    try{
+    //email password
+        if(req.body.email){
+            let user= await userModel.findOne({email:req.body.email});
+            if(user){
+                if(req.body.password==user.password){
+                    return res.json({
+                        message:"user loged in"
+                    });
+                }
+                else{
+                    return res.json({
+                        message:"email or password is wrong"
+                    })
+                }
+            }
+            else{
+                return res.json({
+                    message:"email or password is wrong"
+                })
+            }
+        }
+        else{
+            return res.json({
+                message:"user is not present"
+            })
+        }
+    }
+    catch(err){
+        return res.status(500).json({
+            message:err.message
+        });
+    }
 }
 
 module.exports=authRouter;
