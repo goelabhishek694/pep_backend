@@ -5,7 +5,7 @@ const userModel=require('../models/userModel');
 
 userRouter
 .route('/')
-.get(getUsers)
+.get(protectRoute,getUsers)
 .post(createUser)
 .patch(updateUser)
 .delete(deleteUser);
@@ -65,6 +65,31 @@ function deleteUser(req,res){
 function getUserById(req,res){
     console.log(req.params);
     res.json(req.params.id);
+}
+let flag=false; // Userloggedin
+function protectRoute(req,res,next){
+    try{
+        if(req.cookies){
+            if(req.cookies.login=='1234'){
+                next();
+            }
+            else{
+                res.json({
+                    message:"not authorized"
+                });
+            }
+        }
+        else{
+            res.json({
+                message:"operation not allowed"
+            });
+        }
+    }
+    catch(err){
+        return res.status(500).json({
+            message:err.message
+        })
+    }
 }
 
 module.exports=userRouter;

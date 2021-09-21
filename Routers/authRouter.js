@@ -2,7 +2,6 @@ const express=require('express');
 const userRouter=express.Router();
 const userModel=require('../models/userModel');
 const authRouter=express.Router();
-
 //----------routes-----------
 authRouter
 .route('/signup')
@@ -87,6 +86,7 @@ async function loginUser(req,res){
             let user= await userModel.findOne({email:req.body.email});
             if(user){
                 if(req.body.password==user.password){
+                    res.cookie('login','1234',{httpOnly:true});
                     return res.json({
                         message:"user loged in"
                     });
