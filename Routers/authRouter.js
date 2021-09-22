@@ -4,6 +4,7 @@ const userModel = require("../models/userModel");
 const authRouter = express.Router();
 const jwt=require('jsonwebtoken');
 const {JWT_KEY}=require('../secrets');
+const sendMail=require('../nodemailer');
 //----------routes-----------
 authRouter.route("/signup").post(setCreatedAt, signupUser);
 
@@ -38,10 +39,11 @@ async function signupUser(req, res) {
     let userObj = req.body;
     // user.push({email,name,password});
     //put all data in mongo db
-    sendEmail(userObj);
+    
     // create document in userModel
     let user = await userModel.create(userObj);
     console.log("user", user);
+    sendMail(user);
     res.json({
       message: "user signedUp",
       user: userObj,
